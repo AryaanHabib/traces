@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import BottomNav from './components/BottomNav'; // Import BottomNav
+import Home from './pages/Home';
+import FindChallenge from './pages/FindChallenge';
+import Leaderboard from './pages/Leaderboard';
 
 function App() {
+  console.log('BottomNav added to App.jsx'); // Correct placement of console.log
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Navbar />
+      <div style={{ paddingBottom: '20px' }}> {/* Reserve space for BottomNav */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/challenges" element={<FindChallenge />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
+        </Routes>
+      </div>
+      <BottomNav />
+    </Router>
   );
 }
 
