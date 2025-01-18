@@ -1,0 +1,15 @@
+/* src/assets/global.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+  }
+  
+  #root {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-x: hidden;
+  }
+  
