@@ -17,10 +17,6 @@ function BottomNav() {
         <div style={styles.icon}>🏆</div>
         <div style={styles.text}>Leaderboard</div>
       </Link>
-      <Link to="/map" style={styles.link}>
-        <div style={styles.icon}>📍</div>
-        <div style={styles.text}>Map</div>
-      </Link>
     </div>
   );
 }
@@ -47,7 +43,7 @@ const styles = {
     fontSize: '12px',
   },
   icon: {
-    fontSize: '28px', // Adjusted size for emojis/icons
+    fontSize: '36px', // Adjusted size for emojis/icons
   },
   text: {
     fontSize: '12px',

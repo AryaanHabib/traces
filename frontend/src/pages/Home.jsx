@@ -1,25 +1,95 @@
 import React, { useState } from 'react';
 
-function HomePage() {
+function CircularProgress({ value, max, color, label, displayValueBelow }) {
+  const radius = 40; // Circle radius
+  const strokeWidth = 8; // Stroke width
+  const circumference = 2 * Math.PI * radius; // Circle circumference
+  const progress = (value / max) * circumference; // Progress based on value and max
+
+  return (
+    <div style={{ textAlign: 'center', margin: '10px' }}>
+      <svg width="100" height="100" style={{ transform: 'rotate(0deg)' }}>
+        {/* Background Circle */}
+        <circle
+          cx="50"
+          cy="50"
+          r={radius}
+          stroke="#ddd"
+          strokeWidth={strokeWidth}
+          fill="none"
+        />
+        {/* Progress Circle */}
+        <circle
+          cx="50"
+          cy="50"
+          r={radius}
+          stroke={color}
+          strokeWidth={strokeWidth}
+          fill="none"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference - progress}
+          strokeLinecap="round"
+        />
+        {/* Label Inside Circle */}
+        <text
+          x="50"
+          y="50"
+          textAnchor="middle"
+          dominantBaseline="central"
+          style={{
+            fill: color,
+            fontSize: '12px',
+            fontWeight: 'bold',
+          }}
+        >
+          {label}
+        </text>
+      </svg>
+      {/* Value Below or Above */}
+      <div
+        style={{
+          fontSize: '14px',
+          fontWeight: 'bold',
+          marginTop: displayValueBelow ? '10px' : '-10px',
+          color: '#333',
+        }}
+      >
+        {value}/{max}
+      </div>
+    </div>
+  );
+}
+
+
+const HomePage = () => {
   // Simulated data for different insights
   const userInsights = {
     daily: {
       totalSteps: 1200,
-      totalTime: '30m',
-      totalDistance: '0.8 km',
-      totalScore: 50,
+      maxSteps: 5000,
+      totalTime: 30, // in minutes
+      maxTime: 120, // in minutes
+      totalDistance: 0.8, // in km
+      maxDistance: 5, // in km
+      totalPoints: 50, // Total points earned
     },
     weekly: {
       totalSteps: 8500,
-      totalTime: '4h 20m',
-      totalDistance: '5.5 km',
-      totalScore: 300,
+      maxSteps: 35000,
+      totalTime: 260, // in minutes
+      maxTime: 840, // in minutes
+      totalDistance: 5.5, // in km
+      maxDistance: 35, // in km
+      totalPoints: 300,
     },
     yearly: {
       totalSteps: 450000,
-      totalTime: '320h',
-      totalDistance: '380 km',
-      totalScore: 12500,
+      maxSteps: 1000000,
+      totalTime: 19200, // in minutes
+      maxTime: 43800, // in minutes
+      totalDistance: 380, // in km
+      maxDistance: 1000, // in km
+      totalPoints: 12500,
     },
   };
 
@@ -61,13 +131,7 @@ function HomePage() {
       }}
     >
       {/* Button Group for Switching Insights */}
-      <div
-        style={{
-          display: 'flex',
-          gap: '10px',
-          marginBottom: '20px',
-        }}
-      >
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <button
           style={{
             padding: '10px 20px',
@@ -115,42 +179,36 @@ function HomePage() {
       {/* User Name */}
       <h1 style={{ fontSize: '2.5rem', marginBottom: '20px', color: '#333' }}>John Doe</h1>
 
-      {/* Grouped Container for Steps, Time, and Distance */}
+      {/* Circular Progress Bars for Steps, Time, and Distance */}
       <div
         style={{
-          border: '1px solid #ddd',
-          borderRadius: '8px',
-          padding: '15px',
-          backgroundColor: '#fff',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-          width: '100%',
-          maxWidth: '800px',
-          marginBottom: '20px',
+          display: 'flex',
+          gap: '20px',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)', // Three columns for stats
-            gap: '20px',
-          }}
-        >
-          <div style={{ textAlign: 'center' }}>
-            <h3>Total Steps</h3>
-            <p style={{ fontSize: '1.2rem', color: '#007bff' }}>{currentInsights.totalSteps}</p>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <h3>Total Time</h3>
-            <p style={{ fontSize: '1.2rem', color: '#ffc107' }}>{currentInsights.totalTime}</p>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <h3>Total Distance</h3>
-            <p style={{ fontSize: '1.2rem', color: '#17a2b8' }}>{currentInsights.totalDistance}</p>
-          </div>
-        </div>
+        <CircularProgress
+          value={currentInsights.totalSteps}
+          max={currentInsights.maxSteps}
+          color="#007bff"
+          label="Steps"
+        />
+        <CircularProgress
+          value={currentInsights.totalTime}
+          max={currentInsights.maxTime}
+          color="#ffc107"
+          label="Time"
+        />
+        <CircularProgress
+          value={currentInsights.totalDistance}
+          max={currentInsights.maxDistance}
+          color="#17a2b8"
+          label="Distance"
+        />
       </div>
 
-      {/* Total Score Section */}
+      {/* Total Points Section */}
       <div
         style={{
           border: '1px solid #ddd',
@@ -161,11 +219,11 @@ function HomePage() {
           width: '100%',
           maxWidth: '800px',
           textAlign: 'center',
-          marginBottom: '20px',
+          marginTop: '20px',
         }}
       >
-        <h3>Total Score</h3>
-        <p style={{ fontSize: '1.2rem', color: '#28a745' }}>{currentInsights.totalScore}</p>
+        <h3>Total Points</h3>
+        <p style={{ fontSize: '1.5rem', color: '#28a745' }}>{currentInsights.totalPoints}</p>
       </div>
 
       {/* Friends and Parties Section */}
@@ -176,7 +234,7 @@ function HomePage() {
           gap: '20px',
           width: '100%',
           maxWidth: '800px',
-          marginBottom: '20px',
+          marginTop: '20px',
         }}
       >
         <div
@@ -231,6 +289,7 @@ function HomePage() {
           width: '100%',
           maxWidth: '800px',
           textAlign: 'center',
+          marginTop: '20px',
         }}
       >
         <h3>Attempts</h3>
