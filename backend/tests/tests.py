@@ -19,6 +19,14 @@ def test_get():
     print("Status Code:", response.status_code)
     print("Response:", response.json())
 
+def test_getchallenge():
+    url = f"{BASE_URL}/test_get_challenge/1"
+    response = requests.get(url)
+    print("Status Code:", response.status_code)
+    print("Response:", response.json())
+
 if __name__ == "__main__":
     test_get()
     test_post()
+    test_getchallenge()
+    

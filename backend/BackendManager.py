@@ -20,6 +20,7 @@ class BackendManager:
     def __init__(self) -> None:
         self.users: List[User] = []
         self.challenges: List[Challenge] = []
+        self.challenges: List[Challenge] = [Challenge(1, "Square","Have exactly 4 sides and make sure all sides are same in length", 1, 30)]
         self.daily_challenge_schedule: challenge_schedule = {}  # key: date, value: tuple of 3 Challenges
 
     def user_signup(self, user_id: str, password: str, name: str):
