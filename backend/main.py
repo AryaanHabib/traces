@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS  # Import Flask-CORS
 from dataclasses import asdict
 from BackendManager import bm
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 # ---------------------------------------------------------------------
 # Test Routes
@@ -10,7 +12,8 @@ app = Flask(__name__)
 @app.route("/api/test_get/<num>", methods=["GET"])
 def test_get(num):
     print(num)
-    return jsonify(int(num)*2)
+    return jsonify(int(num) * 2)
+
 
 @app.route("/api/test_post", methods=["POST"])
 def test_post():
@@ -18,7 +21,8 @@ def test_post():
     num1 = int(data.get("num1"))
     num2 = int(data.get("num2"))
     print(num1, num2)
-    return jsonify({"message": num1*num2}), 200
+    return jsonify({"message": num1 * num2}), 200
+
 
 # ---------------------------------------------------------------------
 # User Signup and Login
@@ -30,7 +34,7 @@ def user_signup():
     password = data.get("password")
     name = data.get("name")
     result = bm.user_signup(user_id, password, name)
-    
+
     if result == 0:
         return jsonify({"message": "User created successfully."}), 201
     elif result == 1:
@@ -38,19 +42,21 @@ def user_signup():
     elif result == 2:
         return jsonify({"error": "Unknown Error. Please try again"}), 400
 
+
 @app.route("/api/user_login", methods=["POST"])
 def user_login():
     data = request.json
     user_id = data.get("user_id")
     password = data.get("password")
     result = bm.user_login(user_id, password)
-    
+
     if result == 0:
         return jsonify({"message": "Login successful"}), 201
     elif result == 1:
         return jsonify({"error": "Login failed. Incorrect credentials or user doesn't exist."}), 400
     elif result == 2:
         return jsonify({"error": "Unknown Error. Please try again"}), 400
+
 
 # ---------------------------------------------------------------------
 # User Retrieval
@@ -66,27 +72,25 @@ def get_user(user_id):
     # Mask password
     user_dict["password"] = "******"
 
-    # Flatten friends to a list of friend IDs (avoid recursion or huge data)
+    # Flatten friends to a list of friend IDs
     if "friends" in user_dict:
-        # each "friend" is a full User object in memory, so let's convert to ID
         user_dict["friends"] = [friend.user_id for friend in user.friends]
 
-    # attempts are not cyclical, so asdict() is safe, but you can flatten if needed:
-    # for idx, attempt in enumerate(user_dict["attempts"]):
-    #     # attempt is already a dict, you can modify if needed
-    #     pass
-
     return jsonify(user_dict), 200
+
 
 # ---------------------------------------------------------------------
 # Challenge Retrieval
 # ---------------------------------------------------------------------
 @app.route("/api/get_challenge/<challenge_id>", methods=["GET"])
 def get_challenge(challenge_id):
-    challenge = bm.find_challenge_by_id(challenge_id)
+    challenge_id = int(challenge_id)
+    challenge = bm.get_challenge(challenge_id)
+
     if challenge is None:
         return jsonify({"error": "Challenge not found."}), 404
     return jsonify(asdict(challenge)), 200
+
 
 # ---------------------------------------------------------------------
 # Today's Challenges
@@ -96,10 +100,11 @@ def get_todays_challenges():
     challenges_tuple = bm.get_todays_challenges()
     if not challenges_tuple:
         return jsonify({"error": "No Challenges present."}), 400
-    
+
     # Convert each Challenge dataclass to a dict
     challenges_list = [asdict(ch) for ch in challenges_tuple]
     return jsonify(challenges_list), 200
+
 
 # ---------------------------------------------------------------------
 # Attempts
@@ -128,6 +133,7 @@ def create_attempt():
     elif result == 2:
         return jsonify({"error": "Unknown Error."}), 400
 
+
 @app.route("/api/get_attempt", methods=["GET"])
 def get_attempt():
     user_id = request.args.get("userId")
@@ -135,8 +141,9 @@ def get_attempt():
     attempt = bm.get_attempt(user_id=user_id, attempt_id=attempt_id)
     if attempt is None:
         return jsonify({"error": "Unknown error: Likely either user or attempt not found."}), 404
-    
+
     return jsonify(asdict(attempt)), 200
+
 
 # ---------------------------------------------------------------------
 # Friends
@@ -155,9 +162,9 @@ def add_friend():
     elif result == 2:
         return jsonify({"error": "Friend already exists."}), 400
 
+
 # ---------------------------------------------------------------------
 # Run the App
 # ---------------------------------------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True)
-
+    app.run(host="0.0.0.0", port=5000, debug=True)

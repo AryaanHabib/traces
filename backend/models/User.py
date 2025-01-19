@@ -1,7 +1,8 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
-from attempt import Attempt
-from __future__ import annotations
+from models.attempt import Attempt
+
 
 @dataclass
 class User:

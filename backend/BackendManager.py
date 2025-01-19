@@ -1,14 +1,15 @@
-import os
-import sys
+# import os
+# import sys
 from typing import Dict, List, Tuple
 from datetime import date
+from models.user import User
+from models.challenge import Challenge
+from models.attempt import Attempt
 
 # current_directory = os.path.dirname(os.path.abspath(__file__))
 # sys.path.append(current_directory)
 
-from models.user import User
-from models.challenge import Challenge
-from models.attempt import Attempt
+
 
 challenge_schedule = Dict[date, Tuple[Challenge, Challenge, Challenge]]
 Route = List[Dict[str, float]]
@@ -19,7 +20,6 @@ class BackendManager:
     """
     def __init__(self) -> None:
         self.users: List[User] = []
-        self.challenges: List[Challenge] = []
         self.challenges: List[Challenge] = [Challenge(1, "Square","Have exactly 4 sides and make sure all sides are same in length", 1, 30)]
         self.daily_challenge_schedule: challenge_schedule = {}  # key: date, value: tuple of 3 Challenges
 
@@ -152,6 +152,7 @@ class BackendManager:
             2 => Unknown Error
         """
         pass
+    
 
 
 # Single instance of BackendManager
