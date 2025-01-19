@@ -6,6 +6,9 @@ import Home from './pages/Home';
 import FindChallenge from './pages/FindChallenge';
 import Leaderboard from './pages/Leaderboard';
 import StartChallenge from '../src/pages/challenges/StartChallenge';
+import MapTracking from './pages/MapTracking';
+import AttemptResults from "./pages/AttemptResults";
+
 
 function App() {
   console.log('BottomNav added to App.jsx'); // Correct placement of console.log
@@ -19,6 +22,9 @@ function App() {
           <Route path="/challenges" element={<FindChallenge />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/challenge-details" element={<StartChallenge />} />
+          <Route path="/map" element={<MapTracking />} />
+          <Route path="/attempt-results" element={<AttemptResults />} />
+
         </Routes>
       </div>
       <BottomNav />
