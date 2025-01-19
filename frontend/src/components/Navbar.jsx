@@ -10,13 +10,14 @@ function Navbar() {
 
 const styles = {
   navbar: {
-    height: '60px',
-    backgroundColor: '#282c34',
+    height: '80px',
+    backgroundColor: '#546aef',
     color: 'white',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     fontSize: '24px',
+    fontFamily: 'Playwrite+VN, sans-serif'
   },
   title: {
     fontWeight: 'bold',
