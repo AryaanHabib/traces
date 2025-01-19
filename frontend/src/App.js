@@ -15,7 +15,7 @@ function App() {
 
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar /> */}
       <div style={{ paddingBottom: '20px' }}> {/* Reserve space for BottomNav */}
         <Routes>
           <Route path="/" element={<Home />} />
