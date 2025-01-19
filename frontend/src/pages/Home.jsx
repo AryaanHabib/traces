@@ -66,7 +66,7 @@ function CircularProgress({ value, max, color, label, displayValueBelow }) {
 }
 
 
-const HomePage = ({ onLogout }) => {
+const Home = ({ onLogout }) => {
   // Simulated data for different insights
   const userInsights = {
     daily: {
@@ -135,7 +135,11 @@ const HomePage = ({ onLogout }) => {
 
   const handleLogout = () => {
     onLogout(); // Trigger logout callback
-    navigate("/"); // Navigate to the Auth page
+    navigate("/auth"); // Navigate to the Auth page
+  };
+
+  const handleNavigateToAbout = () => {
+    navigate("/"); // Navigate to the About Page
   };
 
   return (
@@ -236,9 +240,29 @@ const HomePage = ({ onLogout }) => {
                   >
                     {item}
                   </button>
+                ) : item === "About" ? (
+                  <button
+                    onClick={handleNavigateToAbout}
+                    style={{
+                      width: "100%",
+                      background: "transparent",
+                      border: "none",
+                      color: hoveredItem === index ? "#fff" : "#007bff",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      backgroundColor:
+                        hoveredItem === index ? "#007bff" : "transparent",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background-color 0.3s ease, color 0.3s ease",
+                    }}
+                    onMouseEnter={() => setHoveredItem(index)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  >
+                    {item}
+                  </button>
                 ) : (
-                  <a
-                    href={`#${item.toLowerCase()}`}
+                  <span
                     style={{
                       textDecoration: "none",
                       color: hoveredItem === index ? "#fff" : "#007bff",
@@ -248,19 +272,19 @@ const HomePage = ({ onLogout }) => {
                       backgroundColor:
                         hoveredItem === index ? "#007bff" : "transparent",
                       transition: "background-color 0.3s ease, color 0.3s ease",
+                      cursor: "pointer",
                     }}
                     onMouseEnter={() => setHoveredItem(index)}
                     onMouseLeave={() => setHoveredItem(null)}
                   >
                     {item}
-                  </a>
+                  </span>
                 )}
               </li>
             ))}
           </ul>
         </Offcanvas.Body>
       </Offcanvas>
-
 
       {/* Main Content Container */}
       <div
@@ -462,4 +486,4 @@ const HomePage = ({ onLogout }) => {
   );
 }
 
-export default HomePage;
+export default Home;

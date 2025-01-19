@@ -41,7 +41,7 @@ const challenges = [
   },
 ];
 
-function ChallengesPage() {
+function FindChallenge() {
   const [expanded, setExpanded] = useState(null);
   const expandedBoxRef = useRef(null);
   const navigate = useNavigate();
@@ -183,4 +183,4 @@ function ChallengesPage() {
   );
 }
 
-export default ChallengesPage;
+export default FindChallenge;

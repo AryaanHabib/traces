@@ -1,18 +1,22 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Auth = ({ onLogin }) => {
   const [isSignup, setIsSignup] = useState(false);
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("Login successful!");
     onLogin(); // Trigger the login callback
+    navigate("/home"); // Navigate to the Home Page
   };
 
   const handleSignup = (e) => {
     e.preventDefault();
     console.log("Signup successful!");
     onLogin(); // Trigger the login callback
+    navigate("/home"); // Navigate to the Home Page
   };
 
   return (
