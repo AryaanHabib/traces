@@ -8,44 +8,62 @@ const About = () => {
     <div
       style={{
         fontFamily: "Arial, sans-serif",
-        margin: "20px",
+        backgroundColor: "#a0aef4", // Light neutral background for the outer container
         padding: "20px",
-        backgroundColor: "#f9f9f9",
-        borderRadius: "8px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        maxWidth: "800px",
-        marginLeft: "auto",
-        marginRight: "auto",
+        minHeight: "100vh", // Ensure full-page height
       }}
     >
-      <h1 style={{ fontSize: "2.5rem", color: "#333", textAlign: "center" }}>
-        About Us
-      </h1>
-      <p
+      <div
         style={{
-          fontSize: "1.2rem",
-          lineHeight: "1.6",
-          color: "#555",
-          textAlign: "justify",
+          margin: "20px auto", // Add margins and center the inner card
+          padding: "20px",
+          backgroundColor: "#546aef", // Light Blue for the card
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Enhanced shadow for depth
+          maxWidth: "800px", // Limit width
+          color: "#fff", // Navy Blue text
+          fontWeight: "bold", // Bold all text
         }}
       >
-        Welcome to our platform! Learn more about what we do and how we can help
-        you achieve your goals.
-      </p>
-      <div style={{ marginTop: "30px", textAlign: "center" }}>
-        <button
-          onClick={() => navigate("/auth")}
+        <h1
           style={{
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
+            fontSize: "2.5rem",
+            textAlign: "center",
+            marginBottom: "20px",
+            color: "#0b1a79",
+            fontWeight: "bold"
           }}
         >
-          Go to Login/Signup
-        </button>
+          About Us
+        </h1>
+        <p
+          style={{
+            fontSize: "1.2rem",
+            lineHeight: "1.6",
+            textAlign: "justify",
+            marginBottom: "30px",
+          }}
+        >
+          Welcome to our platform! Learn more about what we do and how we can
+          help you achieve your goals.
+        </p>
+        <div style={{ textAlign: "center" }}>
+          <button
+            onClick={() => navigate("/auth")}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#0b1a79", // Primary Blue for the button
+              color: "#fff", // White text
+              border: "none",
+              borderRadius: "5px",
+              cursor: "pointer",
+              fontSize: "1rem",
+              fontWeight: "bold", // Bold text for the button
+            }}
+          >
+            Go to Login/Signup
+          </button>
+        </div>
       </div>
     </div>
   );

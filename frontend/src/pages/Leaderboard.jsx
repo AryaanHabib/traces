@@ -1,14 +1,13 @@
 import React from 'react';
 
 function Leaderboard() {
-  // Example user data
   const users = [
     {
       userID: 'user123',
       name: 'John Doe',
       totalSteps: 12000,
       totalScore: 1500,
-      profilePic: 'https://via.placeholder.com/100', // Example profile picture
+      profilePic: 'https://via.placeholder.com/100',
     },
     {
       userID: 'user456',
@@ -46,7 +45,14 @@ function Leaderboard() {
       }}
     >
       {/* Page Header */}
-      <h1 style={{ fontSize: '2rem', marginBottom: '20px', color: '#333' }}>
+      <h1
+        style={{
+          fontSize: '2.5rem',
+          fontWeight: 'bold',
+          marginBottom: '20px',
+          color: '#0b1a79', // Navy Blue
+        }}
+      >
         Leaderboard
       </h1>
 
@@ -65,14 +71,15 @@ function Leaderboard() {
           <div
             key={user.userID}
             style={{
-              border: '1px solid #ddd',
               borderRadius: '12px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
               padding: '20px',
-              backgroundColor: '#fff',
+              backgroundColor: index % 2 === 0 ? '#546aef' : '#a0aef4', // Alternate colors
+              color: index % 2 === 0 ? '#fff' : '#0b1a79', // Text contrast
               width: '250px',
               textAlign: 'center',
               position: 'relative',
+              fontWeight: 'bold', // All text bold
             }}
           >
             {/* Ranking Badge */}
@@ -107,27 +114,28 @@ function Leaderboard() {
                 borderRadius: '50%',
                 objectFit: 'cover',
                 marginBottom: '15px',
+                border: '2px solid #fff', // Border for image
               }}
             />
 
             {/* User Details */}
             <h2
               style={{
-                fontSize: '1.2rem',
-                color: '#007bff',
+                fontSize: '1.5rem',
                 marginBottom: '10px',
+                fontWeight: "bold",
               }}
             >
               {user.name}
             </h2>
-            <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-              UserID: <span style={{ color: '#555' }}>{user.userID}</span>
+            <p style={{ margin: '5px 0' }}>
+              UserID: <span>{user.userID}</span>
             </p>
-            <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-              Total Steps: <span style={{ color: '#555' }}>{user.totalSteps}</span>
+            <p style={{ margin: '5px 0' }}>
+              Total Steps: <span>{user.totalSteps}</span>
             </p>
-            <p style={{ margin: '5px 0', fontWeight: 'bold' }}>
-              Total Score: <span style={{ color: '#555' }}>{user.totalScore}</span>
+            <p style={{ margin: '5px 0' }}>
+              Total Score: <span>{user.totalScore}</span>
             </p>
           </div>
         ))}

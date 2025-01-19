@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const RouteTracker = () => {
   const { state } = useLocation();
   const { challenge } = state || {};
-  const dummyTime = 60; // Dummy timer value in seconds
+  const dummyTime = 600; // Dummy timer value in seconds
 
   const [watchID, setWatchID] = useState(null);
   const [status, setStatus] = useState("Status: Waiting to start tracking...");

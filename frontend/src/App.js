@@ -21,7 +21,7 @@ function App() {
           <Route
             path="/"
             element={
-              isAuthenticated ? <Navigate to="/home" /> : <About />
+            <About />
             }
           />
           {/* Login/Signup Page */}

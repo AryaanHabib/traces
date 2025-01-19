@@ -6,7 +6,7 @@ function BottomNav() {
   return (
     <div style={styles.nav}>
       {/* Home */}
-      <Link to="/" style={styles.link}>
+      <Link to="/home" style={styles.link}>
         <div style={styles.iconContainer}>
           <img
             src="/assets/icons/home.png"
@@ -47,7 +47,7 @@ function BottomNav() {
 const styles = {
   nav: {
     height: '70px',
-    backgroundColor: '#546aef',
+    backgroundColor: '#0b1a79',
     display: 'flex',
     justifyContent: 'space-between', // Evenly distribute the links
     alignItems: 'center',

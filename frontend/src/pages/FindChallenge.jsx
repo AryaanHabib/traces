@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// Simulating data fetched from the backend
 const challenges = [
   {
     id: 1,
@@ -81,10 +80,10 @@ function FindChallenge() {
           fontWeight: 'bold',
           marginBottom: '20px',
           textAlign: 'center',
-          color: '#333',
+          color: '#0b1a79', // Navy Blue for the title
         }}
       >
-        Daily Challenges
+        Challenges
       </h1>
 
       <div
@@ -97,35 +96,40 @@ function FindChallenge() {
           marginBottom: '20px',
         }}
       >
-        {challenges.map((challenge) => (
+        {challenges.map((challenge, index) => (
           <div
             key={challenge.id}
             ref={expanded === challenge.id ? expandedBoxRef : null}
             style={{
-              border: '1px solid #ddd',
               borderRadius: '8px',
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
               padding: '15px',
-              backgroundColor: '#fff',
+              backgroundColor: index % 2 === 0 ? '#546aef' : '#a0aef4', // Alternate colors
+              color: index % 2 === 0 ? '#fff' : '#0b1a79', // Text contrast
               width: '250px',
               textAlign: 'center',
               flexShrink: 0,
+              fontWeight: 'bold', // Bold text
             }}
           >
-            <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
+            <h3
+              style={{
+                fontSize: '1.5rem',
+                marginBottom: '10px',
+                fontWeight: "bold"
+              }}
+            >
               {challenge.shape}
             </h3>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Time: {challenge.time}</p>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Type: {challenge.type}</p>
-            <p style={{ fontSize: '1rem', margin: '5px 0' }}>
-              Difficulty: {challenge.difficulty}
-            </p>
+            <p style={{ fontSize: '1rem', margin: '5px 0' }}>Difficulty: {challenge.difficulty}</p>
             <button
               onClick={() => toggleExpand(challenge.id)}
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#007bff',
+                color: index % 2 === 0 ? '#a0aef4' : '#546aef', // Alternate button color
                 cursor: 'pointer',
                 fontSize: '1.2rem',
               }}
@@ -137,11 +141,13 @@ function FindChallenge() {
                 style={{
                   marginTop: '15px',
                   textAlign: 'center',
+                  backgroundColor: '#0b1a79', // Navy Blue for expanded content
+                  padding: '10px',
+                  borderRadius: '8px',
+                  color: '#fff', // White text for contrast
                 }}
               >
-                <p style={{ marginBottom: '10px', fontSize: '1rem' }}>
-                  {challenge.description}
-                </p>
+                <p style={{ marginBottom: '10px', fontSize: '1rem' }}>{challenge.description}</p>
                 <div
                   style={{
                     display: 'flex',
@@ -163,8 +169,8 @@ function FindChallenge() {
                     style={{
                       padding: '10px 20px',
                       fontSize: '1rem',
-                      backgroundColor: '#007bff',
-                      color: '#fff',
+                      backgroundColor: '#a0aef4', // Light Blue for button
+                      color: '#0b1a79', // Navy text
                       border: 'none',
                       borderRadius: '5px',
                       cursor: 'pointer',

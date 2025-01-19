@@ -20,17 +20,48 @@ const Auth = ({ onLogin }) => {
   };
 
   return (
-    <div style={{ padding: "20px", maxWidth: "400px", margin: "auto" }}>
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+    <div
+      style={{
+        backgroundColor: "#a0aef4", // Light Blue Background
+        color: "#0b1a79", // Deep Navy Blue for text
+        padding: "20px",
+        maxWidth: "400px",
+        margin: "50px auto",
+        borderRadius: "10px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+      }}
+    >
+      {/* Title */}
+      <h1
+        style={{
+          textAlign: "center",
+          color: "#fff", // Primary Blue
+          marginBottom: "20px",
+          fontWeight: "bold"
+        }}
+      >
+        {isSignup ? "Create an Account" : "Welcome Back"}
+      </h1>
+
+      {/* Toggle Buttons */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginBottom: "20px",
+        }}
+      >
         <button
           style={{
             flex: 1,
             padding: "10px",
-            background: isSignup ? "#007bff" : "#ddd",
-            color: isSignup ? "#fff" : "#333",
+            backgroundColor: isSignup ? "#546aef" : "#0b1a79", // Active and Inactive Colors
+            color: "white",
             border: "none",
             borderRadius: "5px 0 0 5px",
             cursor: "pointer",
+            fontWeight: "bold",
+            transition: "background-color 0.3s ease",
           }}
           onClick={() => setIsSignup(true)}
         >
@@ -40,11 +71,13 @@ const Auth = ({ onLogin }) => {
           style={{
             flex: 1,
             padding: "10px",
-            background: !isSignup ? "#007bff" : "#ddd",
-            color: !isSignup ? "#fff" : "#333",
+            backgroundColor: !isSignup ? "#546aef" : "#0b1a79", // Active and Inactive Colors
+            color: "white",
             border: "none",
             borderRadius: "0 5px 5px 0",
             cursor: "pointer",
+            fontWeight: "bold",
+            transition: "background-color 0.3s ease",
           }}
           onClick={() => setIsSignup(false)}
         >
@@ -52,9 +85,11 @@ const Auth = ({ onLogin }) => {
         </button>
       </div>
 
+      {/* Form */}
       <form onSubmit={isSignup ? handleSignup : handleLogin}>
+        {/* Email Input */}
         <div style={{ marginBottom: "15px" }}>
-          <label>Email</label>
+          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>Email</label>
           <input
             type="email"
             name="email"
@@ -66,11 +101,14 @@ const Auth = ({ onLogin }) => {
               marginTop: "5px",
               border: "1px solid #ddd",
               borderRadius: "5px",
+              fontSize: "1rem",
             }}
           />
         </div>
+
+        {/* Password Input */}
         <div style={{ marginBottom: "15px" }}>
-          <label>Password</label>
+          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>Password</label>
           <input
             type="password"
             name="password"
@@ -82,12 +120,17 @@ const Auth = ({ onLogin }) => {
               marginTop: "5px",
               border: "1px solid #ddd",
               borderRadius: "5px",
+              fontSize: "1rem",
             }}
           />
         </div>
+
+        {/* Confirm Password (only for Signup) */}
         {isSignup && (
           <div style={{ marginBottom: "15px" }}>
-            <label>Confirm Password</label>
+            <label style={{ color: "#0b1a79", fontWeight: "bold" }}>
+              Confirm Password
+            </label>
             <input
               type="password"
               name="confirmPassword"
@@ -99,21 +142,30 @@ const Auth = ({ onLogin }) => {
                 marginTop: "5px",
                 border: "1px solid #ddd",
                 borderRadius: "5px",
+                fontSize: "1rem",
               }}
             />
           </div>
         )}
+
+        {/* Submit Button */}
         <button
           type="submit"
           style={{
             width: "100%",
-            padding: "10px",
-            background: "#007bff",
-            color: "#fff",
+            padding: "15px",
+            backgroundColor: "#546aef", // Primary Blue
+            color: "white",
             border: "none",
             borderRadius: "5px",
+            fontSize: "1.2rem",
+            fontWeight: "bold",
             cursor: "pointer",
+            marginTop: "10px",
+            transition: "background-color 0.3s ease",
           }}
+          onMouseOver={(e) => (e.target.style.backgroundColor = "#0b1a79")}
+          onMouseOut={(e) => (e.target.style.backgroundColor = "#546aef")}
         >
           {isSignup ? "Sign Up" : "Log In"}
         </button>
