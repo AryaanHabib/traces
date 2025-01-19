@@ -6,10 +6,18 @@ app = Flask(__name__)
 
 # API Endpoints
 
-@app.route("/api/test", methods=["GET"])
-def connection():
-    print(792)
-    return jsonify(361)
+@app.route("/api/test_get/<num>", methods=["GET"])
+def test_get(num):
+    print(num)
+    return jsonify(int(num)*2)
+
+@app.route("/api/test_post", methods=["POST"])
+def test_post():
+    data = request.json
+    num1 = int(data.get("num1"))
+    num2 = int(data.get("num2"))
+    print(num1, num2)
+    return jsonify({"message": num1*num2}), 200
 
 @app.route("/api/user_signup", methods=["POST"])
 def user_signup():
@@ -27,7 +35,7 @@ def user_signup():
         return jsonify({"error": "Unknown Error. Please try again"}), 400
 
 @app.route("/api/user_login", methods=["POST"])
-def user_signup():
+def user_login():
     data = request.json
     user_id = data.get("user_id")
     password = data.get("password")

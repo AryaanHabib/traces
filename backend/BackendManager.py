@@ -6,7 +6,7 @@ from typing import List
 # sys.path.append(current_directory)
 
 
-from models.User import User
+# from models.User import User
 
 # users = []
 # challenges = []
@@ -19,8 +19,8 @@ class BackendManager:
     Main class that manages the entire backend, including students, questions, rubrics, and reference answers.
     """
     def __init__(self) -> None:
-        self.users: List[User] = []
-        self.challenges: List[Challenge] = []
+        # self.users: List[User] = []
+        # self.challenges: List[Challenge] = []
         self.daily_challenge_schedule = [] #!!!
         self.date = ""
     
