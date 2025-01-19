@@ -1,13 +1,10 @@
-// src/pages/RouteTracker.jsx
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
-
-
+import { useNavigate, useLocation } from "react-router-dom";
 
 const RouteTracker = () => {
   const { state } = useLocation();
   const { challenge } = state || {};
+  const dummyTime = 5; // Dummy timer value in seconds
 
   const [watchID, setWatchID] = useState(null);
   const [status, setStatus] = useState("Status: Waiting to start tracking...");
@@ -16,6 +13,8 @@ const RouteTracker = () => {
   const [map, setMap] = useState(null);
   const [polyline, setPolyline] = useState(null);
   const [marker, setMarker] = useState(null);
+  const [timeLeft, setTimeLeft] = useState(dummyTime);
+  const [isTracking, setIsTracking] = useState(false);
 
   const MIN_DISTANCE = 2;
   const ACCURACY_THRESHOLD = 100;
@@ -86,6 +85,8 @@ const RouteTracker = () => {
 
   const startTracking = () => {
     setStatus("Status: Tracking your movement...");
+    setIsTracking(true);
+
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
         const accuracy = position.coords.accuracy;
@@ -136,37 +137,83 @@ const RouteTracker = () => {
     setWatchID(watchId);
   };
 
-  const stopTrackingHandler = () => {
-    setStatus("Status: Tracking stopped.");
-
+  const stopTracking = () => {
     if (watchID) {
       navigator.geolocation.clearWatch(watchID);
       setWatchID(null);
-
-      const steps = Math.round(totalDistance / STEP_LENGTH);
-
-      // Navigate to the AttemptResults page with the route coordinates and total steps
-      navigate("/attempt-results", {
-        state: { coordinates: routeCoordinates, steps: steps },
-      });
     }
+    setIsTracking(false);
+
+    const steps = Math.round(totalDistance / STEP_LENGTH);
+
+    // Navigate to the AttemptResults page
+    navigate("/attempt-results", {
+      state: { coordinates: routeCoordinates, steps: steps },
+    });
   };
 
   useEffect(() => {
     initMap();
   }, []);
 
+  useEffect(() => {
+    if (!isTracking) return;
+
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => {
+        if (prevTime <= 1) {
+          stopTracking();
+          return 0;
+        }
+        return prevTime - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isTracking]);
+
   return (
     <div>
-      <div id="controls">
-        <button onClick={startTracking} disabled={watchID !== null}>
+      <div id="controls" style={{ textAlign: "center", margin: "20px" }}>
+        <button
+          onClick={startTracking}
+          disabled={watchID !== null}
+          style={{
+            padding: "20px 40px",
+            fontSize: "20px",
+            margin: "10px",
+            borderRadius: "8px",
+            backgroundColor: watchID !== null ? "#ccc" : "#4CAF50",
+            color: "#fff",
+            border: "none",
+            cursor: watchID !== null ? "not-allowed" : "pointer",
+          }}
+        >
           Start Tracking
         </button>
-        <button onClick={stopTrackingHandler} disabled={watchID === null}>
+        <button
+          onClick={stopTracking}
+          disabled={!watchID}
+          style={{
+            padding: "20px 40px",
+            fontSize: "20px",
+            margin: "10px",
+            borderRadius: "8px",
+            backgroundColor: watchID ? "#f44336" : "#ccc",
+            color: "#fff",
+            border: "none",
+            cursor: watchID ? "pointer" : "not-allowed",
+          }}
+        >
           Stop Tracking
         </button>
       </div>
-      <div id="status">{status}</div>
+      <div id="status" style={{ textAlign: "center", fontSize: "18px", marginBottom: "10px" }}>
+        {status}
+      </div>
+      <div style={{ textAlign: "center", fontSize: "24px", marginBottom: "20px" }}>
+        Timer: {timeLeft}s
+      </div>
       <div id="map" style={{ height: "80vh", width: "100%" }}></div>
     </div>
   );
