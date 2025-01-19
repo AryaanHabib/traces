@@ -10,9 +10,9 @@ class Attempt:
     steps_earned: int
     score_earned: int
     # !!!
-    # simplified_route_image: Optional[str]  # Path or URL to the image, can be Non
+    # simplified_route_image: Optional[str]  # Path or URL to the image, can be None
     attempt_date: date
-    time_taken: float  # Time taken in seconds
+    time_taken: int  # Time taken in seconds
 
     def __post_init__(self):
         # Validate completion_status
