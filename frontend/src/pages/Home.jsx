@@ -61,7 +61,7 @@ function CircularProgress({ value, max, color, label, displayValueBelow }) {
 }
 
 
-function HomePage() {
+const HomePage = () => {
   // Simulated data for different insights
   const userInsights = {
     daily: {
