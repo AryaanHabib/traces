@@ -9,11 +9,13 @@ import StartChallenge from "./pages/challenges/StartChallenge";
 import MapTracking from "./pages/MapTracking";
 import AttemptResults from "./pages/AttemptResults";
 import BottomNav from "./components/BottomNav";
+import { UserProvider } from "./UserContext";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Track login state
 
   return (
+    <UserProvider>
     <Router>
       <div style={{ paddingBottom: isAuthenticated ? "20px" : "0px" }}>
         <Routes>
@@ -46,6 +48,7 @@ function App() {
         {isAuthenticated && <BottomNav />}
       </div>
     </Router>
+    </UserProvider>
   );
 }
 

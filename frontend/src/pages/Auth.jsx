@@ -3,27 +3,88 @@ import { useNavigate } from "react-router-dom";
 
 const Auth = ({ onLogin }) => {
   const [isSignup, setIsSignup] = useState(false);
-  const navigate = useNavigate(); // Hook for navigation
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log("Login successful!");
-    onLogin(); // Trigger the login callback
-    navigate("/home"); // Navigate to the Home Page
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    console.log("Signup successful!");
-    onLogin(); // Trigger the login callback
-    navigate("/home"); // Navigate to the Home Page
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/user_signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          user_id: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Signup failed");
+      }
+
+      alert("Signup successful!");
+      onLogin();
+      navigate("/home", { state: { userId: formData.email } });
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert(error.message);
+    }
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/user_login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: formData.email,
+          password: formData.password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Login failed");
+      }
+
+      alert("Login successful!");
+      onLogin();
+      navigate("/home", { state: { userId: formData.email } });
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert(error.message);
+    }
   };
 
   return (
     <div
       style={{
-        backgroundColor: "#a0aef4", // Light Blue Background
-        color: "#0b1a79", // Deep Navy Blue for text
+        backgroundColor: "#a0aef4",
+        color: "#0b1a79",
         padding: "20px",
         maxWidth: "400px",
         margin: "50px auto",
@@ -31,19 +92,17 @@ const Auth = ({ onLogin }) => {
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
       }}
     >
-      {/* Title */}
       <h1
         style={{
           textAlign: "center",
-          color: "#fff", // Primary Blue
+          color: "#fff",
           marginBottom: "20px",
-          fontWeight: "bold"
+          fontWeight: "bold",
         }}
       >
         {isSignup ? "Create an Account" : "Welcome Back"}
       </h1>
 
-      {/* Toggle Buttons */}
       <div
         style={{
           display: "flex",
@@ -55,7 +114,7 @@ const Auth = ({ onLogin }) => {
           style={{
             flex: 1,
             padding: "10px",
-            backgroundColor: isSignup ? "#546aef" : "#0b1a79", // Active and Inactive Colors
+            backgroundColor: isSignup ? "#546aef" : "#0b1a79",
             color: "white",
             border: "none",
             borderRadius: "5px 0 0 5px",
@@ -71,7 +130,7 @@ const Auth = ({ onLogin }) => {
           style={{
             flex: 1,
             padding: "10px",
-            backgroundColor: !isSignup ? "#546aef" : "#0b1a79", // Active and Inactive Colors
+            backgroundColor: !isSignup ? "#546aef" : "#0b1a79",
             color: "white",
             border: "none",
             borderRadius: "0 5px 5px 0",
@@ -85,55 +144,15 @@ const Auth = ({ onLogin }) => {
         </button>
       </div>
 
-      {/* Form */}
       <form onSubmit={isSignup ? handleSignup : handleLogin}>
-        {/* Email Input */}
-        <div style={{ marginBottom: "15px" }}>
-          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>User ID</label>
-          <input
-            type="email"
-            name="email"
-            required
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "10px",
-              marginTop: "5px",
-              border: "1px solid #ddd",
-              borderRadius: "5px",
-              fontSize: "1rem",
-            }}
-          />
-        </div>
-
-        {/* Password Input */}
-        <div style={{ marginBottom: "15px" }}>
-          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>Password</label>
-          <input
-            type="password"
-            name="password"
-            required
-            style={{
-              display: "block",
-              width: "100%",
-              padding: "10px",
-              marginTop: "5px",
-              border: "1px solid #ddd",
-              borderRadius: "5px",
-              fontSize: "1rem",
-            }}
-          />
-        </div>
-
-        {/* Confirm Password (only for Signup) */}
         {isSignup && (
           <div style={{ marginBottom: "15px" }}>
-            <label style={{ color: "#0b1a79", fontWeight: "bold" }}>
-              Confirm Password
-            </label>
+            <label style={{ color: "#0b1a79", fontWeight: "bold" }}>Name</label>
             <input
-              type="password"
-              name="confirmPassword"
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
               required
               style={{
                 display: "block",
@@ -148,13 +167,76 @@ const Auth = ({ onLogin }) => {
           </div>
         )}
 
-        {/* Submit Button */}
+        <div style={{ marginBottom: "15px" }}>
+          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>User ID</label>
+          <input
+            type="userID"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "10px",
+              marginTop: "5px",
+              border: "1px solid #ddd",
+              borderRadius: "5px",
+              fontSize: "1rem",
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: "15px" }}>
+          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>Password</label>
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+            required
+            style={{
+              display: "block",
+              width: "100%",
+              padding: "10px",
+              marginTop: "5px",
+              border: "1px solid #ddd",
+              borderRadius: "5px",
+              fontSize: "1rem",
+            }}
+          />
+        </div>
+
+        {isSignup && (
+          <div style={{ marginBottom: "15px" }}>
+            <label style={{ color: "#0b1a79", fontWeight: "bold" }}>
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleInputChange}
+              required
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "10px",
+                marginTop: "5px",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+                fontSize: "1rem",
+              }}
+            />
+          </div>
+        )}
+
         <button
           type="submit"
           style={{
             width: "100%",
             padding: "15px",
-            backgroundColor: "#546aef", // Primary Blue
+            backgroundColor: "#546aef",
             color: "white",
             border: "none",
             borderRadius: "5px",
