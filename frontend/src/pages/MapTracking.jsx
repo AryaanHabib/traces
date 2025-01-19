@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const RouteTracker = () => {
   const { state } = useLocation();
   const { challenge } = state || {};
-  const dummyTime = 5; // Dummy timer value in seconds
+  const dummyTime = 60; // Dummy timer value in seconds
 
   const [watchID, setWatchID] = useState(null);
   const [status, setStatus] = useState("Status: Waiting to start tracking...");
@@ -148,7 +148,7 @@ const RouteTracker = () => {
 
     // Navigate to the AttemptResults page
     navigate("/attempt-results", {
-      state: { coordinates: routeCoordinates, steps: steps },
+      state: { coordinates: routeCoordinates, steps: steps, timeTaken: dummyTime - timeLeft },
     });
   };
 
@@ -173,20 +173,32 @@ const RouteTracker = () => {
   }, [isTracking]);
 
   return (
-    <div>
-      <div id="controls" style={{ textAlign: "center", margin: "20px" }}>
+    <div style={{ position: "relative" }}>
+      <div id="map" style={{ height: "100vh", width: "100%" }}></div>
+      <div
+        style={{
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          zIndex: 1000,
+          background: "rgba(255, 255, 255, 0.8)",
+          padding: "10px",
+          borderRadius: "8px",
+          textAlign: "center",
+        }}
+      >
+        <div style={{ fontSize: "18px", marginBottom: "10px" }}>Timer: {timeLeft}s</div>
         <button
           onClick={startTracking}
           disabled={watchID !== null}
           style={{
-            padding: "20px 40px",
-            fontSize: "20px",
-            margin: "10px",
-            borderRadius: "8px",
+            padding: "10px 20px",
+            marginBottom: "5px",
+            borderRadius: "5px",
             backgroundColor: watchID !== null ? "#ccc" : "#4CAF50",
             color: "#fff",
             border: "none",
-            cursor: watchID !== null ? "not-allowed" : "pointer",
+            fontSize: "16px",
           }}
         >
           Start Tracking
@@ -195,26 +207,17 @@ const RouteTracker = () => {
           onClick={stopTracking}
           disabled={!watchID}
           style={{
-            padding: "20px 40px",
-            fontSize: "20px",
-            margin: "10px",
-            borderRadius: "8px",
+            padding: "10px 20px",
+            borderRadius: "5px",
             backgroundColor: watchID ? "#f44336" : "#ccc",
             color: "#fff",
             border: "none",
-            cursor: watchID ? "pointer" : "not-allowed",
+            fontSize: "16px",
           }}
         >
           Stop Tracking
         </button>
       </div>
-      <div id="status" style={{ textAlign: "center", fontSize: "18px", marginBottom: "10px" }}>
-        {status}
-      </div>
-      <div style={{ textAlign: "center", fontSize: "24px", marginBottom: "20px" }}>
-        Timer: {timeLeft}s
-      </div>
-      <div id="map" style={{ height: "80vh", width: "100%" }}></div>
     </div>
   );
 };
