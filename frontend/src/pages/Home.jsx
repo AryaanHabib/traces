@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap styles are imported
+
+
 
 function CircularProgress({ value, max, color, label, displayValueBelow }) {
   const radius = 40; // Circle radius
@@ -93,8 +97,6 @@ const HomePage = () => {
     },
   };
 
-  const [currentInsights, setCurrentInsights] = useState(userInsights.daily);
-
   // Static data for Friends, Parties, and Attempts
   const userData = {
     friends: ['User123', 'User456', 'User789'],
@@ -118,19 +120,159 @@ const HomePage = () => {
     ],
   };
 
+  const [currentInsights, setCurrentInsights] = useState(userInsights.daily);
+
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [hoveredItem, setHoveredItem] = useState(null);
+
+  const handleSidebarClose = () => setShowSidebar(false);
+  const handleSidebarShow = () => setShowSidebar(true);
+
+  const menuItems = ['About', 'Profile', 'Settings', 'Help', 'Logout'];
+
   return (
     <div
       style={{
         fontFamily: 'Arial, sans-serif',
         margin: '20px',
         padding: '20px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
         backgroundColor: '#f9f9f9',
       }}
     >
-      {/* Button Group for Switching Insights */}
+      {/* Heading Row with Image */}
+      <div
+        style={{
+          marginBottom: '20px',
+        }}
+      >
+        {/* Heading and Paragraph Container */}
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          {/* Left-aligned Heading */}
+          <h1
+            style={{
+              fontSize: '2.5rem',
+              color: '#333',
+              margin: '0',
+              textAlign: 'left',
+            }}
+          >
+            Hi John Doe!
+          </h1>
+
+          {/* Right-aligned Image */}
+          <img
+            src="/assets/icons/user-color.png" // Replace with your image URL
+            alt="Profile"
+            onClick={handleSidebarShow}
+            style={{
+              width: '64px',
+              height: '64px',
+              cursor: 'pointer',
+              marginLeft: 'auto'
+            }}
+          />
+        </div>
+
+        {/* Paragraph aligned with heading */}
+        <p
+          style={{
+            textAlign: 'left',
+            margin: '5px 0 0 0', // Ensure no extra margin
+            color: '#555', // Optional: Slightly lighter color for text
+          }}
+        >
+          Leave your mark on the world
+        </p>
+
+        
+      </div>
+
+      {/* Sidebar (Offcanvas) */}
+      <Offcanvas
+        show={showSidebar}
+        onHide={handleSidebarClose}
+        placement="end"
+        style={{ width: '250px' }}
+      >
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>User ID</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
+            {menuItems.map((item, index) => (
+              <li
+                key={index}
+                style={{
+                  marginBottom: '10px',
+                }}
+              >
+                <a
+                  href={`#${item.toLowerCase()}`}
+                  style={{
+                    textDecoration: 'none',
+                    color: hoveredItem === index ? '#fff' : '#007bff',
+                    padding: '10px',
+                    display: 'block',
+                    borderRadius: '5px',
+                    backgroundColor: hoveredItem === index ? '#007bff' : 'transparent',
+                    transition: 'background-color 0.3s ease, color 0.3s ease',
+                  }}
+                  onMouseEnter={() => setHoveredItem(index)} // Set hovered item
+                  onMouseLeave={() => setHoveredItem(null)} // Reset hover state
+                >
+                  {item}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </Offcanvas.Body>
+      </Offcanvas>
+
+
+      {/* Main Content Container */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center', // Center all other content
+        }}
+      >
+        {/* Circular Progress Bars */}
+        <div
+          style={{
+            display: 'flex',
+            gap: '20px',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <CircularProgress
+            value={1200}
+            max={5000}
+            color="#007bff"
+            label="Steps"
+          />
+          <CircularProgress
+            value={30}
+            max={120}
+            color="#ffc107"
+            label="Time"
+          />
+          <CircularProgress
+            value={0.8}
+            max={5}
+            color="#17a2b8"
+            label="Distance"
+          />
+        </div>
+
+        {/* Button Group for Switching Insights */}
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <button
           style={{
@@ -176,37 +318,6 @@ const HomePage = () => {
         </button>
       </div>
 
-      {/* User Name */}
-      <h1 style={{ fontSize: '2.5rem', marginBottom: '20px', color: '#333' }}>John Doe</h1>
-
-      {/* Circular Progress Bars for Steps, Time, and Distance */}
-      <div
-        style={{
-          display: 'flex',
-          gap: '20px',
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-        }}
-      >
-        <CircularProgress
-          value={currentInsights.totalSteps}
-          max={currentInsights.maxSteps}
-          color="#007bff"
-          label="Steps"
-        />
-        <CircularProgress
-          value={currentInsights.totalTime}
-          max={currentInsights.maxTime}
-          color="#ffc107"
-          label="Time"
-        />
-        <CircularProgress
-          value={currentInsights.totalDistance}
-          max={currentInsights.maxDistance}
-          color="#17a2b8"
-          label="Distance"
-        />
-      </div>
 
       {/* Total Points Section */}
       <div
@@ -319,6 +430,7 @@ const HomePage = () => {
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }
