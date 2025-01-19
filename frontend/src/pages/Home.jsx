@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap styles are imported
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -65,7 +66,7 @@ function CircularProgress({ value, max, color, label, displayValueBelow }) {
 }
 
 
-const HomePage = () => {
+const HomePage = ({ onLogout }) => {
   // Simulated data for different insights
   const userInsights = {
     daily: {
@@ -129,6 +130,13 @@ const HomePage = () => {
   const handleSidebarShow = () => setShowSidebar(true);
 
   const menuItems = ['About', 'Profile', 'Settings', 'Help', 'Logout'];
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout(); // Trigger logout callback
+    navigate("/"); // Navigate to the Auth page
+  };
 
   return (
     <div
@@ -198,36 +206,55 @@ const HomePage = () => {
         show={showSidebar}
         onHide={handleSidebarClose}
         placement="end"
-        style={{ width: '250px' }}
+        style={{ width: "250px" }}
       >
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>User ID</Offcanvas.Title>
+          <Offcanvas.Title>User Menu</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+          <ul style={{ listStyle: "none", padding: 0 }}>
             {menuItems.map((item, index) => (
-              <li
-                key={index}
-                style={{
-                  marginBottom: '10px',
-                }}
-              >
-                <a
-                  href={`#${item.toLowerCase()}`}
-                  style={{
-                    textDecoration: 'none',
-                    color: hoveredItem === index ? '#fff' : '#007bff',
-                    padding: '10px',
-                    display: 'block',
-                    borderRadius: '5px',
-                    backgroundColor: hoveredItem === index ? '#007bff' : 'transparent',
-                    transition: 'background-color 0.3s ease, color 0.3s ease',
-                  }}
-                  onMouseEnter={() => setHoveredItem(index)} // Set hovered item
-                  onMouseLeave={() => setHoveredItem(null)} // Reset hover state
-                >
-                  {item}
-                </a>
+              <li key={index} style={{ marginBottom: "10px" }}>
+                {item === "Logout" ? (
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      width: "100%",
+                      background: "transparent",
+                      border: "none",
+                      color: hoveredItem === index ? "#fff" : "#007bff",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      backgroundColor:
+                        hoveredItem === index ? "#007bff" : "transparent",
+                      cursor: "pointer",
+                      textAlign: "left",
+                      transition: "background-color 0.3s ease, color 0.3s ease",
+                    }}
+                    onMouseEnter={() => setHoveredItem(index)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  >
+                    {item}
+                  </button>
+                ) : (
+                  <a
+                    href={`#${item.toLowerCase()}`}
+                    style={{
+                      textDecoration: "none",
+                      color: hoveredItem === index ? "#fff" : "#007bff",
+                      padding: "10px",
+                      display: "block",
+                      borderRadius: "5px",
+                      backgroundColor:
+                        hoveredItem === index ? "#007bff" : "transparent",
+                      transition: "background-color 0.3s ease, color 0.3s ease",
+                    }}
+                    onMouseEnter={() => setHoveredItem(index)}
+                    onMouseLeave={() => setHoveredItem(null)}
+                  >
+                    {item}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
