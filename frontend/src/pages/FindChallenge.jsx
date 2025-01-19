@@ -113,7 +113,7 @@ function ChallengesPage() {
             }}
           >
             <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>
-              Shape: {challenge.shape}
+              {challenge.shape}
             </h3>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Time: {challenge.time}</p>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Type: {challenge.type}</p>
