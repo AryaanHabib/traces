@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useUser } from "../UserContext"
 
 const AttemptResults = () => {
   const { state } = useLocation();
@@ -8,15 +9,17 @@ const AttemptResults = () => {
 
   const handleSaveAttempt = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/attempts", {
+      const response = await fetch("http://127.0.0.1:5000/api/create_attempt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          challengeId,
           coordinates,
           steps,
           time_taken: timeTaken,
+          user_id: user?.user_id
         }),
       });
 
