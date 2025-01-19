@@ -1,5 +1,8 @@
+
+
 import matplotlib.pyplot as plt
 import json
+import os
 
 star_coordinates = [
   {
@@ -611,7 +614,21 @@ rectangle_coordinates = [
   }
 ]
 
-def plot_coordinates(coordinates, output_file="output.png"):
+
+def plot_coordinates(coordinates, user_id, attempt_id, output_dir="images"):
+    """
+    Plots the given coordinates on a map and saves the plot as an image file.
+    
+    Args:
+    - coordinates: List of dictionaries containing latitude and longitude.
+    - user_id: The ID of the user making the attempt.
+    - attempt_id: The ID of the attempt being plotted.
+    - output_dir: Directory where the plot will be saved (default is "images").
+    """
+    # Ensure the images folder exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
     # Extract latitudes and longitudes
     latitudes = [point["lat"] for point in coordinates]
     longitudes = [point["lng"] for point in coordinates]
@@ -623,26 +640,32 @@ def plot_coordinates(coordinates, output_file="output.png"):
     normalized_coords = [
         {
             "x": (lng - min_lng) / (max_lng - min_lng),
-            "y": (lat - min_lat) / (max_lat - min_lat),
+            "y": (lat - min_lat) / (max_lat - min_lat)
         }
         for lat, lng in zip(latitudes, longitudes)
     ]
+    
+    # Create the plot
+    plt.figure(figsize=(8, 8))
+    plt.plot(longitudes, latitudes, marker='o', linestyle='-', color='b', markersize=5)
+    plt.title(f"Route Plot for User {user_id}.{attempt_id}")
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    
+    # Optionally add grid and other plot features
+    plt.grid(True)
+    plt.gca().set_aspect('equal', adjustable='box')  # Ensure square aspect ratio
 
-    # Prepare plot
-    plt.figure(figsize=(6, 6))
-    plt.axis("off")
-
-    # Plot the line and points
-    x_coords = [coord["x"] for coord in normalized_coords]
-    y_coords = [coord["y"] for coord in normalized_coords]
-
-    plt.plot(x_coords, y_coords, color="blue", linewidth=2)
-    plt.scatter(x_coords, y_coords, color="blue", s=10)
-
-    # Save to PNG file
-    plt.savefig(output_file, bbox_inches="tight", pad_inches=0, dpi=300)
+    # Save the plot to a file as PNG
+    plot_filename = f"{user_id}.{attempt_id}.png"
+    plot_filepath = os.path.join(output_dir, plot_filename)
+    plt.savefig(plot_filepath, format='png')  # Ensure the format is 'png'
     plt.close()
 
-# Example usage
-plot_coordinates(star_coordinates, output_file="star_plot.png")
-plot_coordinates(rectangle_coordinates, output_file="rectangle_plot.png")
+    print(f"Plot saved as {plot_filepath}")
+    return plot_filepath
+
+output_path = plot_coordinates(star_coordinates, user_id="U001", attempt_id=1)
+
+# You can now access the saved plot via output_path
+print(f"The plot has been saved at: {output_path}")

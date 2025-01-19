@@ -109,29 +109,7 @@ def get_todays_challenges():
 # ---------------------------------------------------------------------
 # Attempts
 # ---------------------------------------------------------------------
-@app.route("/api/create_attempt", methods=["POST"])
-def create_attempt():
-    data = request.json
-    challenge_id = data.get("challenge_id")
-    user_id = data.get("user_id")
-    steps = data.get("steps")
-    time_taken = data.get("time_taken")
-    route = data.get("route")
 
-    result = bm.create_attempt(
-        attempt_id=challenge_id,
-        user_id=user_id,
-        steps=steps,
-        time_taken=time_taken,
-        route=route
-    )
-
-    if result == 0:
-        return jsonify({"message": "Attempt created successfully."}), 200
-    elif result == 1:
-        return jsonify({"error": "User not found."}), 404
-    elif result == 2:
-        return jsonify({"error": "Unknown Error."}), 400
 
 
 @app.route("/api/get_attempt", methods=["GET"])
@@ -175,30 +153,55 @@ def start_challenge():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/attempts', methods=['POST'])
-def save_attempt():
-    """
-    Endpoint to save attempt data.
-    Request body should include 'coordinates', 'steps', and 'time_taken'.
-    """
-    try:
-        data = request.json
-        print("STATE :", data)
-        user_id = "user123"  # Replace with the actual user ID, e.g., from a session
-        attempt_id = len(bm.get_user(user_id).attempts) + 1  # Generate attempt ID
-        coordinates = data.get("coordinates")
-        steps = data.get("steps")
-        time_taken = data.get("time_taken")
+# @app.route('/attempts', methods=['POST'])
+# def save_attempt():
+#     """
+#     Endpoint to save attempt data.
+#     Request body should include 'coordinates', 'steps', and 'time_taken'.
+#     """
+#     try:
+#         data = request.json
+#         print("STATE :", data)
+#         user_id = "user123"  # Replace with the actual user ID, e.g., from a session
+#         attempt_id = len(bm.get_user(user_id).attempts) + 1  # Generate attempt ID
+#         coordinates = data.get("coordinates")
+#         steps = data.get("steps")
+#         time_taken = data.get("time_taken")
 
-        # Simulate saving the attempt
-        bm.create_attempt(attempt_id, user_id, steps, time_taken, coordinates)
-        return jsonify({"message": "Attempt saved successfully!"}), 200
-    except Exception as e:
-        print(f"Error saving attempt: {e}")
-        return jsonify({"error": "Failed to save attempt"}), 500
+#         # Simulate saving the attempt
+#         bm.create_attempt(attempt_id, user_id, steps, time_taken, coordinates)
+#         return jsonify({"message": "Attempt saved successfully!"}), 200
+#     except Exception as e:
+#         print(f"Error saving attempt: {e}")
+#         return jsonify({"error": "Failed to save attempt"}), 500
     
 # ---------------------------------------------------------------------
 # Run the App
 # ---------------------------------------------------------------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
+
+
+@app.route("/api/create_attempt", methods=["POST"])
+def create_attempt():
+    data = request.json
+    challenge_id = data.get("challenge_id")
+    user_id = data.get("user_id")
+    steps = data.get("steps")
+    time_taken = data.get("time_taken")
+    route = data.get("route")
+
+    result = bm.create_attempt(
+        attempt_id=challenge_id,
+        user_id=user_id,
+        steps=steps,
+        time_taken=time_taken,
+        route=route
+    )
+
+    if result == 0:
+        return jsonify({"message": "Attempt created successfully."}), 200
+    elif result == 1:
+        return jsonify({"error": "User not found."}), 404
+    elif result == 2:
+        return jsonify({"error": "Unknown Error."}), 400

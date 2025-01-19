@@ -2,9 +2,11 @@
 # import sys
 from typing import Dict, List, Tuple
 from datetime import date
+from backend.services.image_validator import validate_image_with_clip
 from models.user import User
 from models.challenge import Challenge
 from models.attempt import Attempt
+from services.route_to_image import plot_coordinates
 
 # current_directory = os.path.dirname(os.path.abspath(__file__))
 # sys.path.append(current_directory)
@@ -14,13 +16,62 @@ from models.attempt import Attempt
 challenge_schedule = Dict[date, Tuple[Challenge, Challenge, Challenge]]
 Route = List[Dict[str, float]]
 
+
 class BackendManager:
     """
     Main class that manages the entire backend, including users, challenges, attempts, etc.
     """
+    
     def __init__(self) -> None:
-        self.users: List[User] = []
-        self.challenges: List[Challenge] = [Challenge(1, "Square","Have exactly 4 sides and make sure all sides are same in length", 1, 30)]
+
+        attempt1 = Attempt(
+            attempt_id=1,
+            challenge_id=1,
+            completion_status=0,  # Success
+            steps_earned=100,
+            score_earned=50,
+            attempt_date=date(2025, 1, 19),
+            time_taken=120
+        )
+
+        attempt2 = Attempt(
+            attempt_id=2,
+            challenge_id=1,
+            completion_status=1,  # Failure due to exceeding time
+            steps_earned=50,
+            score_earned=20,
+            attempt_date=date(2025, 1, 18),
+            time_taken=180
+        )
+
+        # Create some instances of User
+        user1 = User(
+            user_id="U001",
+            name="Alice",
+            password="alice123",
+            steps=200,
+            score=150,
+            attempts=[attempt1],
+            friends=[]
+        )
+
+        user2 = User(
+            user_id="U002",
+            name="Bob",
+            password="bob123",
+            steps=300,
+            score=250,
+            attempts=[attempt2],
+            friends=[user1]  # Bob is friends with Alice
+        )
+        self.users: List[User] = [user1, user2]
+        self.challenges: List[Challenge] = [Challenge(1, "Square","Have exactly 4 sides and make sure all sides are same in length", 1, 30), Challenge(
+    challenge_id= 2,
+    shape= 'Circle',
+    acceptance_criteria= 'Answer trivia questions in a circular pattern!',
+    difficulty_level = 2,
+    time= 200)]
+        
         self.daily_challenge_schedule: challenge_schedule = {}  # key: date, value: tuple of 3 Challenges
 
     def user_signup(self, user_id: str, password: str, name: str):
@@ -152,27 +203,27 @@ class BackendManager:
     #         2 => Unknown Error
     #     """
     #     pass
-    def create_attempt(self, attempt_id: int, user_id: str, steps: int, time_taken: int, route: list):
+    def create_attempt(self, challenge_id: int, attempt_id: int, user_id: str, steps: int, time_taken: int, route: list):
         """
         Create a new attempt for a user.
         """
-        try:
-            user = self.get_user(user_id)
-            if not user:
-                return 1  # User not found
 
-            new_attempt = Attempt(
-                attempt_id=attempt_id,
-                user_id=user_id,
-                steps=steps,
-                time_taken=time_taken,
-                route=route,
-            )
-            user.attempts.append(new_attempt)
-            return 0  # Success
-        except Exception as e:
-            print(f"Error creating attempt: {e}")
-            return 2  # Unknown error
+        user = self.get_user(user_id)
+        if not user:
+            return 1  # User not found
+
+        new_attempt = Attempt(attempt_id = attempt_id, challenge_id = challenge_id, steps_earned = steps, time_taken = time_taken, attempt_date = date.today())
+
+        plot_coordinates()
+
+        output_path = plot_coordinates(route, user_id=user_id, attempt_id=attempt_id)
+
+        new_attempt.completion_status = validate_image_with_clip(user_id=user_id, attempt_id=attempt_id, challenge_id=challenge_id)
+
+        new_attempt.score_earned = steps*(self.get_challenge(challenge_id).difficulty_level)
+        
+        user.attempts.append(new_attempt) 
+        return 0
 
 
     
