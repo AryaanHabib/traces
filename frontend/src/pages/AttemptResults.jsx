@@ -84,8 +84,7 @@ console.log(attemptData.time_taken); // Access time_taken
     >
       <h1
         style={{ fontSize: "2.5rem", marginBottom: "20px", color: "#0b1a79" }}
-      >
-        <h1>Attempt Results</h1>
+      >Attempt Results</h1>
       <p style={{ fontSize: '1.2rem', margin: '10px 0', color: '#546aef' }}>
         Attempt ID: <span style={{ color: '#0b1a79' }}>{attemptData.attempt_id}</span>
       </p>
