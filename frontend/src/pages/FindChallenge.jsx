@@ -51,7 +51,7 @@ function ChallengesPage() {
   };
 
   const handleStart = (challenge) => {
-    navigate('/challenge-details', { state: { challenge } });
+    navigate('/map', { state: { challenge } });
   };
 
   useEffect(() => {

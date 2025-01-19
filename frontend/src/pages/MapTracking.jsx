@@ -1,8 +1,14 @@
 // src/pages/RouteTracker.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+
+
 
 const RouteTracker = () => {
+  const { state } = useLocation();
+  const { challenge } = state || {};
+
   const [watchID, setWatchID] = useState(null);
   const [status, setStatus] = useState("Status: Waiting to start tracking...");
   const [routeCoordinates, setRouteCoordinates] = useState([]);
