@@ -1,6 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useUser } from "../UserContext"
+import { useUser } from "../UserContext";
 
 const AttemptResults = () => {
   const { state } = useLocation();
@@ -19,9 +19,26 @@ const AttemptResults = () => {
           coordinates,
           steps,
           time_taken: timeTaken,
-          user_id: user?.user_id
+          user_id: user?.user_id,
         }),
       });
+
+      // Construct the query string with the necessary parameters
+      const queryParams = new URLSearchParams({
+        userId: user?.user_id,
+        attemptId: attemptId.toString(), // Ensure attemptId is a string
+      });
+
+      // Make the GET request with the query string
+      const response2 = await fetch(
+        `http://127.0.0.1:5000/api/get_attempt?${queryParams.toString()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to save the attempt");
@@ -44,7 +61,9 @@ const AttemptResults = () => {
         overflowY: "auto",
       }}
     >
-      <h1 style={{ fontSize: "2.5rem", marginBottom: "20px", color: "#0b1a79" }}>
+      <h1
+        style={{ fontSize: "2.5rem", marginBottom: "20px", color: "#0b1a79" }}
+      >
         Attempt Results
       </h1>
       <p style={{ fontSize: "1.2rem", margin: "10px 0", color: "#546aef" }}>
@@ -65,7 +84,9 @@ const AttemptResults = () => {
           textAlign: "center",
         }}
       >
-        <h2 style={{ fontSize: "1.8rem", marginBottom: "15px" }}>Route Trace</h2>
+        <h2 style={{ fontSize: "1.8rem", marginBottom: "15px" }}>
+          Route Trace
+        </h2>
         <pre
           style={{
             textAlign: "left",
