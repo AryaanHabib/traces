@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const RouteTracker = () => {
   const { state } = useLocation();
-  const { challenge } = state || {};
+  const { challengeId } = state || {};
   const dummyTime = 600; // Dummy timer value in seconds
 
   const [watchID, setWatchID] = useState(null);
@@ -143,14 +143,20 @@ const RouteTracker = () => {
       setWatchID(null);
     }
     setIsTracking(false);
-
+  
     const steps = Math.round(totalDistance / STEP_LENGTH);
-
-    // Navigate to the AttemptResults page
+  
+    // Navigate to AttemptResults with all data
     navigate("/attempt-results", {
-      state: { coordinates: routeCoordinates, steps: steps, timeTaken: dummyTime - timeLeft },
+      state: {
+        challengeId, // Include challengeId
+        coordinates: routeCoordinates,
+        steps: steps,
+        timeTaken: dummyTime - timeLeft,
+      },
     });
   };
+  
 
   useEffect(() => {
     initMap();

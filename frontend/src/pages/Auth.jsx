@@ -89,7 +89,7 @@ const Auth = ({ onLogin }) => {
       <form onSubmit={isSignup ? handleSignup : handleLogin}>
         {/* Email Input */}
         <div style={{ marginBottom: "15px" }}>
-          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>Email</label>
+          <label style={{ color: "#0b1a79", fontWeight: "bold" }}>User ID</label>
           <input
             type="email"
             name="email"

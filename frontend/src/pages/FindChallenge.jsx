@@ -49,8 +49,36 @@ function FindChallenge() {
     setExpanded(expanded === id ? null : id);
   };
 
-  const handleStart = (challenge) => {
-    navigate('/map', { state: { challenge } });
+  // // Send challenge data to backend
+  // const handleStart = async (challenge) => {
+  //   try {
+  //     const response = await fetch('http://localhost:5000/api/challenges/start', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(challenge), // Send the challenge details
+  //     });
+
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       console.log('Challenge started successfully:', data);
+
+  //       // Navigate to the map or next page
+  //       navigate('/map', { state: { challenge } });
+  //       console.log(9)
+
+  //     } else {
+  //       console.error('Failed to start challenge:', await response.text());
+  //     }
+  //   } catch (error) {
+  //     console.error('Error in starting challenge:', error);
+  //   }
+  // };
+
+  // Pass only the challenge ID to the next page
+  const handleStart = (id) => {
+    navigate('/map', { state: { challengeId: id } });
   };
 
   useEffect(() => {
@@ -80,7 +108,7 @@ function FindChallenge() {
           fontWeight: 'bold',
           marginBottom: '20px',
           textAlign: 'center',
-          color: '#0b1a79', // Navy Blue for the title
+          color: '#0b1a79',
         }}
       >
         Challenges
@@ -104,23 +132,15 @@ function FindChallenge() {
               borderRadius: '8px',
               boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
               padding: '15px',
-              backgroundColor: index % 2 === 0 ? '#546aef' : '#a0aef4', // Alternate colors
-              color: index % 2 === 0 ? '#fff' : '#0b1a79', // Text contrast
+              backgroundColor: index % 2 === 0 ? '#546aef' : '#a0aef4',
+              color: index % 2 === 0 ? '#fff' : '#0b1a79',
               width: '250px',
               textAlign: 'center',
               flexShrink: 0,
-              fontWeight: 'bold', // Bold text
+              fontWeight: 'bold',
             }}
           >
-            <h3
-              style={{
-                fontSize: '1.5rem',
-                marginBottom: '10px',
-                fontWeight: "bold"
-              }}
-            >
-              {challenge.shape}
-            </h3>
+            <h3 style={{ fontSize: '1.5rem', marginBottom: '10px' }}>{challenge.shape}</h3>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Time: {challenge.time}</p>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Type: {challenge.type}</p>
             <p style={{ fontSize: '1rem', margin: '5px 0' }}>Difficulty: {challenge.difficulty}</p>
@@ -129,7 +149,7 @@ function FindChallenge() {
               style={{
                 background: 'none',
                 border: 'none',
-                color: index % 2 === 0 ? '#a0aef4' : '#546aef', // Alternate button color
+                color: index % 2 === 0 ? '#a0aef4' : '#546aef',
                 cursor: 'pointer',
                 fontSize: '1.2rem',
               }}
@@ -141,10 +161,10 @@ function FindChallenge() {
                 style={{
                   marginTop: '15px',
                   textAlign: 'center',
-                  backgroundColor: '#0b1a79', // Navy Blue for expanded content
+                  backgroundColor: '#0b1a79',
                   padding: '10px',
                   borderRadius: '8px',
-                  color: '#fff', // White text for contrast
+                  color: '#fff',
                 }}
               >
                 <p style={{ marginBottom: '10px', fontSize: '1rem' }}>{challenge.description}</p>
@@ -169,8 +189,8 @@ function FindChallenge() {
                     style={{
                       padding: '10px 20px',
                       fontSize: '1rem',
-                      backgroundColor: '#a0aef4', // Light Blue for button
-                      color: '#0b1a79', // Navy text
+                      backgroundColor: '#a0aef4',
+                      color: '#0b1a79',
                       border: 'none',
                       borderRadius: '5px',
                       cursor: 'pointer',

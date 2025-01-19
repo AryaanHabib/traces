@@ -143,15 +143,39 @@ class BackendManager:
         today = date.today()
         return self.daily_challenge_schedule.get(today, None)
 
-    def create_attempt(self, attempt_id: int, user_id: str, steps: int, time_taken: int, route):
+    # def create_attempt(self, attempt_id: int, user_id: str, steps: int, time_taken: int, route):
+    #     """
+    #     Stub: intentionally unimplemented as requested.
+    #     Return codes:
+    #         0 => Attempt created successfully
+    #         1 => User not found
+    #         2 => Unknown Error
+    #     """
+    #     pass
+    def create_attempt(self, attempt_id: int, user_id: str, steps: int, time_taken: int, route: list):
         """
-        Stub: intentionally unimplemented as requested.
-        Return codes:
-            0 => Attempt created successfully
-            1 => User not found
-            2 => Unknown Error
+        Create a new attempt for a user.
         """
-        pass
+        try:
+            user = self.get_user(user_id)
+            if not user:
+                return 1  # User not found
+
+            new_attempt = Attempt(
+                attempt_id=attempt_id,
+                user_id=user_id,
+                steps=steps,
+                time_taken=time_taken,
+                route=route,
+            )
+            user.attempts.append(new_attempt)
+            return 0  # Success
+        except Exception as e:
+            print(f"Error creating attempt: {e}")
+            return 2  # Unknown error
+
+
+    
     
 
 

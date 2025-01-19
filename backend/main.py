@@ -162,7 +162,41 @@ def add_friend():
     elif result == 2:
         return jsonify({"error": "Friend already exists."}), 400
 
+@app.route('/api/challenges/start', methods=['POST'])
+def start_challenge():
+    try:
+        data = request.json
+        print("Challenge started:", data)
 
+        # Simulate storing or processing the data
+        # You can add database logic here
+
+        return jsonify({"message": "Challenge started successfully!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/attempts', methods=['POST'])
+def save_attempt():
+    """
+    Endpoint to save attempt data.
+    Request body should include 'coordinates', 'steps', and 'time_taken'.
+    """
+    try:
+        data = request.json
+        print("STATE :", data)
+        user_id = "user123"  # Replace with the actual user ID, e.g., from a session
+        attempt_id = len(bm.get_user(user_id).attempts) + 1  # Generate attempt ID
+        coordinates = data.get("coordinates")
+        steps = data.get("steps")
+        time_taken = data.get("time_taken")
+
+        # Simulate saving the attempt
+        bm.create_attempt(attempt_id, user_id, steps, time_taken, coordinates)
+        return jsonify({"message": "Attempt saved successfully!"}), 200
+    except Exception as e:
+        print(f"Error saving attempt: {e}")
+        return jsonify({"error": "Failed to save attempt"}), 500
+    
 # ---------------------------------------------------------------------
 # Run the App
 # ---------------------------------------------------------------------
